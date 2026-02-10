@@ -135,6 +135,10 @@ export default function Timeline() {
         </ResponsiveContainer>
       </div>
 
+      <div className="timeline-legend">
+        <span className="legend-item"><span className="legend-line price-line" /> Price (USD)</span>
+        <span className="legend-item"><span className="legend-line resistance-line" /> Market Resistance (normalized)</span>
+      </div>
     </section>
   );
 }
