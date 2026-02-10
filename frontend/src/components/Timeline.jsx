@@ -91,14 +91,7 @@ export default function Timeline() {
           <ComposedChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
 
-            {/* State zone backgrounds */}
-            {stateZones.map((z, i) => (
-              <ReferenceArea
-                key={i} x1={z.x1} x2={z.x2}
-                fill={STATE_COLORS[z.category]?.fill || 'transparent'}
-                fillOpacity={1} ifOverflow="extendDomain"
-              />
-            ))}
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
 
             <XAxis
               dataKey="date" tick={{ fill: '#555874', fontSize: 11 }}
@@ -107,6 +100,7 @@ export default function Timeline() {
             />
             <YAxis
               yAxisId="price" orientation="left"
+              width={60}
               tick={{ fill: '#8B90A8', fontSize: 11 }}
               domain={['auto', 'auto']}
               tickFormatter={v => `$${v.toFixed(2)}`}
@@ -114,6 +108,7 @@ export default function Timeline() {
             />
             <YAxis
               yAxisId="resistance" orientation="right"
+              width={60}
               tick={{ fill: '#00DCFF', fontSize: 11 }}
               domain={[0, 1]}
               tickFormatter={v => `${(v * 100).toFixed(0)}%`}
@@ -140,13 +135,6 @@ export default function Timeline() {
         </ResponsiveContainer>
       </div>
 
-      <div className="timeline-legend">
-        <span className="legend-item"><span className="legend-line price-line" /> Price (USD)</span>
-        <span className="legend-item"><span className="legend-line resistance-line" /> Market Resistance (normalized)</span>
-        <span className="legend-item"><span className="legend-dot cat-healthy" /> Healthy</span>
-        <span className="legend-item"><span className="legend-dot cat-caution" /> Caution</span>
-        <span className="legend-item"><span className="legend-dot cat-warning" /> Warning</span>
-      </div>
     </section>
   );
 }
