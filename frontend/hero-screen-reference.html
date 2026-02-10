@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADI Token Health — Hero Screen Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep:        #060611;
+    --bg-card:        rgba(12, 14, 28, 0.7);
+    --bg-card-hover:  rgba(18, 20, 38, 0.85);
+    --bg-elevated:    rgba(20, 22, 42, 0.6);
+    --cyan:           #00DCFF;
+    --cyan-dim:       rgba(0, 220, 255, 0.15);
+    --cyan-glow:      rgba(0, 220, 255, 0.08);
+    --cyan-border:    rgba(0, 220, 255, 0.2);
+    --text-primary:   #F0F2F8;
+    --text-secondary: #8B90A8;
+    --text-muted:     #555874;
+    --green:          #00E5A0;
+    --green-dim:      rgba(0, 229, 160, 0.12);
+    --amber:          #FFB547;
+    --amber-dim:      rgba(255, 181, 71, 0.12);
+    --red:            #FF5C5C;
+    --red-dim:        rgba(255, 92, 92, 0.12);
+    --border:         rgba(255, 255, 255, 0.06);
+    --border-active:  rgba(255, 255, 255, 0.12);
+    --font-display:   'Syne', sans-serif;
+    --font-body:      'DM Sans', sans-serif;
+    --font-mono:      'JetBrains Mono', monospace;
+  }
+
+  html { font-size: 16px; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .grid-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      linear-gradient(rgba(0,220,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,220,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask: radial-gradient(ellipse 70% 60% at 50% 30%, black 0%, transparent 100%);
+    -webkit-mask: radial-gradient(ellipse 70% 60% at 50% 30%, black 0%, transparent 100%);
+  }
+
+  .glow-orb {
+    position: fixed; width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,220,255,0.06) 0%, transparent 70%);
+    top: -100px; right: -100px; pointer-events: none; z-index: 0;
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .glow-orb-2 {
+    position: fixed; width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,160,0.04) 0%, transparent 70%);
+    bottom: -50px; left: -50px; pointer-events: none; z-index: 0;
+    animation: orbFloat 15s ease-in-out infinite reverse;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, 15px); }
+  }
+
+  .dashboard {
+    position: relative; z-index: 1;
+    max-width: 1340px; margin: 0 auto; padding: 24px 32px;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 32px; padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo-mark {
+    height: 32px; display: flex; align-items: center;
+  }
+  .logo-mark svg { height: 32px; width: auto; }
+  .header-title {
+    font-family: var(--font-display); font-size: 18px;
+    font-weight: 600; letter-spacing: -0.3px;
+  }
+  .header-title span { color: var(--text-muted); font-weight: 400; }
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(0,229,160,0.5);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .header-meta {
+    font-size: 12px; color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+  .header-meta .live {
+    color: var(--green); display: inline-flex;
+    align-items: center; gap: 6px;
+  }
+
+  /* BENTO GRID */
+  .bento {
+    display: grid;
+    grid-template-columns: 340px 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+
+  /* CARD BASE */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: border-color 0.3s, background 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .card:hover {
+    border-color: var(--border-active);
+    background: var(--bg-card-hover);
+  }
+  .card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan-border), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+  .card-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--text-muted); margin-bottom: 16px;
+  }
+
+  /* STATE CARD */
+  .state-card {
+    grid-row: 1 / 3;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 32px 24px;
+  }
+  .state-card .card-label { align-self: flex-start; margin-bottom: 24px; }
+
+  .ring-container { position: relative; width: 180px; height: 180px; margin-bottom: 24px; }
+  .ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: rgba(255,255,255,0.04); stroke-width: 6; }
+  .ring-value {
+    fill: none; stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 440; stroke-dashoffset: 440;
+    animation: ringFill 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    filter: drop-shadow(0 0 6px var(--ring-color));
+  }
+  @keyframes ringFill { to { stroke-dashoffset: var(--ring-target); } }
+  .ring-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .ring-icon { font-size: 28px; margin-bottom: 4px; }
+  .ring-score {
+    font-family: var(--font-mono); font-size: 32px;
+    font-weight: 700; color: var(--red);
+  }
+  .ring-label {
+    font-size: 11px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;
+  }
+  .state-name {
+    font-family: var(--font-display); font-size: 22px;
+    font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px;
+  }
+  .state-name.healthy { color: var(--green); }
+  .state-name.warning { color: var(--amber); }
+  .state-name.critical { color: var(--red); }
+  .state-desc {
+    font-size: 13px; color: var(--text-secondary);
+    line-height: 1.6; max-width: 260px;
+  }
+  .state-id-badge {
+    margin-top: 16px; font-family: var(--font-mono);
+    font-size: 10px; color: var(--text-muted);
+    padding: 4px 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+  }
+
+  /* METRICS ROW */
+  .metrics-row {
+    grid-column: 2 / 4;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .metric-card { padding: 20px; }
+  .metric-value {
+    font-family: var(--font-mono); font-size: 28px;
+    font-weight: 700; letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  .metric-label {
+    font-size: 12px; color: var(--text-muted); margin-bottom: 8px;
+  }
+  .metric-sub {
+    font-size: 12px; font-family: var(--font-mono);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .metric-sub.positive { color: var(--green); }
+  .metric-sub.negative { color: var(--red); }
+  .metric-sub .arrow { font-size: 10px; }
+
+  /* FORCES CARD */
+  .forces-card { grid-column: 2; }
+  .force-item {
+    display: grid; grid-template-columns: 130px 1fr 50px;
+    align-items: center; gap: 12px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .force-item:last-of-type { border-bottom: none; }
+  .force-name {
+    font-size: 12px; color: var(--text-secondary);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .force-bar-track {
+    height: 6px; background: rgba(255,255,255,0.04);
+    border-radius: 3px; position: relative;
+  }
+  .force-bar-center {
+    position: absolute; left: 50%; top: -2px;
+    width: 1px; height: 10px;
+    background: rgba(255,255,255,0.15);
+  }
+  .force-bar {
+    position: absolute; height: 100%;
+    border-radius: 3px; top: 0;
+    animation: barGrow 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .force-bar.positive {
+    left: 50%;
+    background: linear-gradient(90deg, var(--green), rgba(0,229,160,0.4));
+  }
+  .force-bar.negative {
+    background: linear-gradient(270deg, var(--red), rgba(255,92,92,0.4));
+  }
+  @keyframes barGrow { from { width: 0 !important; } }
+  .force-value {
+    font-family: var(--font-mono); font-size: 13px;
+    font-weight: 600; text-align: right;
+  }
+  .force-value.positive { color: var(--green); }
+  .force-value.negative { color: var(--red); }
+  .mockup-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--amber); display: inline-block;
+    box-shadow: 0 0 4px rgba(255,181,71,0.4);
+  }
+  .mockup-badge {
+    font-size: 10px; font-family: var(--font-mono);
+    color: var(--amber); padding: 3px 8px;
+    border-radius: 4px; background: var(--amber-dim);
+    border: 1px solid rgba(255,181,71,0.2);
+  }
+
+  /* TRANSITIONS */
+  .transitions-card { grid-column: 3; }
+  .transition-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .transition-item:last-of-type { border-bottom: none; }
+  .transition-header {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 8px;
+  }
+  .transition-name {
+    font-family: var(--font-display); font-size: 14px;
+    font-weight: 600;
+  }
+  .transition-name.warning { color: var(--amber); }
+  .transition-name.caution { color: var(--cyan); }
+  .transition-name.healthy { color: var(--green); }
+  .transition-prob {
+    font-family: var(--font-mono); font-size: 16px; font-weight: 700;
+  }
+  .transition-prob.warning { color: var(--amber); }
+  .transition-prob.caution { color: var(--cyan); }
+  .transition-prob.healthy { color: var(--green); }
+  .transition-bar {
+    height: 4px; background: rgba(255,255,255,0.04);
+    border-radius: 2px; overflow: hidden; margin-bottom: 6px;
+  }
+  .transition-bar-fill {
+    height: 100%; border-radius: 2px;
+    animation: barGrow 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .transition-bar-fill.warning {
+    background: linear-gradient(90deg, var(--amber), rgba(255,181,71,0.3));
+  }
+  .transition-bar-fill.caution {
+    background: linear-gradient(90deg, var(--cyan), rgba(0,220,255,0.3));
+  }
+  .transition-bar-fill.healthy {
+    background: linear-gradient(90deg, var(--green), rgba(0,229,160,0.3));
+  }
+  .transition-trigger {
+    font-size: 11px; color: var(--text-muted); font-style: italic;
+  }
+
+  /* RESISTANCE VISUAL */
+  .resistance-visual {
+    display: flex; align-items: center; gap: 16px; margin-top: 12px;
+  }
+  .resistance-bar-outer {
+    flex: 1; height: 8px; background: rgba(255,255,255,0.04);
+    border-radius: 4px; overflow: hidden;
+  }
+  .resistance-bar-inner {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--red), var(--amber));
+    box-shadow: 0 0 10px rgba(255,92,92,0.3);
+    animation: barGrow 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .resistance-value {
+    font-family: var(--font-mono); font-size: 24px;
+    font-weight: 700; color: var(--red);
+    min-width: 50px; text-align: right;
+  }
+  .resistance-labels {
+    display: flex; justify-content: space-between; margin-top: 6px;
+    font-size: 10px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* FOOTER */
+  .footer-note {
+    margin-top: 24px; padding: 16px 20px;
+    background: rgba(255,181,71,0.05);
+    border: 1px solid rgba(255,181,71,0.1);
+    border-radius: 12px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+  }
+  .footer-note .icon { font-size: 18px; flex-shrink: 0; }
+
+  /* ANIMATIONS */
+  .fade-in {
+    opacity: 0; transform: translateY(12px);
+    animation: fadeIn 0.6s ease forwards;
+  }
+  @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .delay-5 { animation-delay: 0.5s; }
+  .delay-6 { animation-delay: 0.6s; }
+  .delay-7 { animation-delay: 0.7s; }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="glow-orb"></div>
+<div class="glow-orb-2"></div>
+
+<div class="dashboard">
+
+  <header class="header fade-in">
+    <div class="header-left">
+      <div class="logo-mark"><svg viewBox="0 0 678 231" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M142.672 112.906C143.524 114.31 143.524 116.068 142.672 117.471L75.4402 228.258C73.7197 231.094 69.5948 231.094 67.8741 228.259L0.638744 117.479C-0.212893 116.075 -0.212916 114.317 0.638683 112.914L67.8743 2.12631C69.5949 -0.70876 73.7198 -0.708775 75.4403 2.12629L142.672 112.906ZM32.2501 108.476C30.4663 111.414 32.5881 115.167 36.0328 115.167H107.285C110.73 115.167 112.852 111.414 111.068 108.476L75.4401 49.7931C73.7193 46.9588 69.5954 46.9589 67.8747 49.7932L32.2501 108.476ZM71.6573 77.4093C78.5863 77.4093 84.2041 83.0208 84.2041 89.9417C84.2034 96.8618 78.5856 102.47 71.6573 102.47C64.7286 102.47 59.1113 96.8618 59.1102 89.9417C59.1102 83.0208 64.7283 77.4093 71.6573 77.4093Z" fill="url(#adi_grad)"/><path d="M628.95 33.6271H677.251V196.276H628.95V33.6271Z" fill="#DCE4FF"/><path d="M417.131 33.6271H503.365C565.789 33.6271 604.747 59.2966 604.747 113.929V115.974C604.747 170.72 565.906 196.276 503.365 196.276H417.131V33.6271ZM465.432 158.567H502.682C539.59 158.567 554.967 144.71 554.967 115.86V114.043C554.967 85.1929 539.478 71.3363 502.682 71.3363H465.432V158.567Z" fill="#DCE4FF"/><path d="M181.401 196.276L261.255 33.6272H318.668L398.637 196.276H346.464L331.769 164.473H246.218L231.523 196.276H181.401ZM262.053 130.512H315.935L289.051 72.3585L262.053 130.512Z" fill="#DCE4FF"/><defs><linearGradient id="adi_grad" x1="71.6553" y1="89.259" x2="71.6553" y2="192.993" gradientUnits="userSpaceOnUse"><stop stop-color="#FE7109"/><stop offset="1" stop-color="#003BFF"/></linearGradient></defs></svg></div>
+      <div class="header-title">Token Health <span>/ Economic Observability</span></div>
+    </div>
+    <div class="header-right">
+      <div class="header-meta">
+        <span class="live"><span class="live-dot"></span> LIVE</span>
+        &nbsp;&nbsp;Feb 10, 2026 · 15:42 UTC
+      </div>
+    </div>
+  </header>
+
+  <div class="bento">
+
+    <div class="card state-card fade-in delay-1">
+      <div class="card-label">Economic State</div>
+      <div class="ring-container">
+        <svg class="ring-svg" viewBox="0 0 160 160">
+          <circle class="ring-bg" cx="80" cy="80" r="70" />
+          <circle class="ring-value" cx="80" cy="80" r="70"
+            style="stroke: var(--red); --ring-color: var(--red); --ring-target: 374;" />
+        </svg>
+        <div class="ring-inner">
+          <div class="ring-icon">⚠</div>
+          <div class="ring-score">0.15</div>
+          <div class="ring-label">Health Index</div>
+        </div>
+      </div>
+      <div class="state-name warning">Liquidity Stress</div>
+      <div class="state-desc">Insufficient market depth, high sensitivity to volume shocks. Resistance critically low.</div>
+      <div class="state-id-badge">STATE #9 · warning</div>
+    </div>
+
+    <div class="metrics-row fade-in delay-2">
+      <div class="card metric-card">
+        <div class="card-label">Price</div>
+        <div class="metric-value">$2.64</div>
+        <div class="metric-label">ADI / USD</div>
+        <div class="metric-sub positive"><span class="arrow">▲</span> +5.9% 7d</div>
+      </div>
+      <div class="card metric-card">
+        <div class="card-label">Volume 24h</div>
+        <div class="metric-value">$1.89M</div>
+        <div class="metric-label">Trading volume</div>
+        <div class="metric-sub positive"><span class="arrow">▲</span> 1.18x vs 7d avg</div>
+      </div>
+      <div class="card metric-card">
+        <div class="card-label">Market Cap</div>
+        <div class="metric-value">$135.2M</div>
+        <div class="metric-label">Fully diluted</div>
+      </div>
+      <div class="card metric-card">
+        <div class="card-label">Market Resistance</div>
+        <div class="metric-value" style="color: var(--red);">0.06</div>
+        <div class="metric-label">Absorption capacity</div>
+        <div class="metric-sub negative"><span class="arrow">▼</span> Critically low</div>
+      </div>
+    </div>
+
+    <div class="card forces-card fade-in delay-4">
+      <div class="card-label">Active Forces</div>
+      <div class="force-item">
+        <div class="force-name">Market Pressure</div>
+        <div class="force-bar-track">
+          <div class="force-bar-center"></div>
+          <div class="force-bar positive" style="width: 23%;"></div>
+        </div>
+        <div class="force-value positive">+0.23</div>
+      </div>
+      <div class="force-item">
+        <div class="force-name">Emission Pressure</div>
+        <div class="force-bar-track">
+          <div class="force-bar-center"></div>
+          <div class="force-bar negative" style="width: 50%; right: 50%; left: auto;"></div>
+        </div>
+        <div class="force-value negative">−0.80</div>
+      </div>
+      <div class="force-item">
+        <div class="force-name">Utility Demand <span class="mockup-dot" title="Mockup data"></span></div>
+        <div class="force-bar-track">
+          <div class="force-bar-center"></div>
+          <div class="force-bar positive" style="width: 15%;"></div>
+        </div>
+        <div class="force-value positive">+0.20</div>
+      </div>
+      <div class="force-item">
+        <div class="force-name">MM Support <span class="mockup-dot" title="Mockup data"></span></div>
+        <div class="force-bar-track">
+          <div class="force-bar-center"></div>
+          <div class="force-bar positive" style="width: 20%;"></div>
+        </div>
+        <div class="force-value positive">+0.40</div>
+      </div>
+      <div class="force-item">
+        <div class="force-name">Narrative <span class="mockup-dot" title="Mockup data"></span></div>
+        <div class="force-bar-track">
+          <div class="force-bar-center"></div>
+          <div class="force-bar negative" style="width: 10%; right: 50%; left: auto;"></div>
+        </div>
+        <div class="force-value negative">−0.10</div>
+      </div>
+      <div style="margin-top: 12px;">
+        <span class="mockup-badge">Mockup data</span>
+        <span style="font-size:11px; color: var(--text-muted); margin-left: 8px;">3 of 5 forces estimated</span>
+      </div>
+    </div>
+
+    <div class="card transitions-card fade-in delay-5">
+      <div class="card-label">Probable Transitions</div>
+      <div class="transition-item">
+        <div class="transition-header">
+          <div class="transition-name warning">Erosion Phase</div>
+          <div class="transition-prob warning">35%</div>
+        </div>
+        <div class="transition-bar">
+          <div class="transition-bar-fill warning" style="width: 35%;"></div>
+        </div>
+        <div class="transition-trigger">No intervention, spiral continues</div>
+      </div>
+      <div class="transition-item">
+        <div class="transition-header">
+          <div class="transition-name caution">Liquidity-Driven Expansion</div>
+          <div class="transition-prob caution">30%</div>
+        </div>
+        <div class="transition-bar">
+          <div class="transition-bar-fill caution" style="width: 30%;"></div>
+        </div>
+        <div class="transition-trigger">Emergency MM support</div>
+      </div>
+      <div class="transition-item">
+        <div class="transition-header">
+          <div class="transition-name healthy">Utility-Driven Stability</div>
+          <div class="transition-prob healthy">15%</div>
+        </div>
+        <div class="transition-bar">
+          <div class="transition-bar-fill healthy" style="width: 15%;"></div>
+        </div>
+        <div class="transition-trigger">Organic buyers step in</div>
+      </div>
+      <div style="margin-top: 12px;">
+        <span class="mockup-badge">Scenario model</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note fade-in delay-7">
+    <span class="icon">💡</span>
+    <div>
+      <strong>Economic Observability Layer</strong> — This dashboard provides formalized economic state detection, not trading signals.
+      States are computed from real-time market data (CoinGecko, Kraken) combined with on-chain and governance parameters.
+      Forces marked with <span style="color:var(--amber)">●</span> are estimated and will be replaced with real data sources.
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+{
+  "states": [
+    {
+      "id": 1,
+      "name": "Healthy Utility Expansion",
+      "category": "healthy",
+      "description": "Organic growth driven by real usage"
+    },
+    {
+      "id": 2,
+      "name": "Utility-Driven Stability",
+      "category": "healthy",
+      "description": "Stable equilibrium with consistent utility"
+    },
+    {
+      "id": 3,
+      "name": "Speculative Dominance",
+      "category": "caution",
+      "description": "Price driven by speculation, not fundamentals"
+    },
+    {
+      "id": 4,
+      "name": "Utility-Market Divergence",
+      "category": "caution",
+      "description": "Internal factors dominate market movements"
+    },
+    {
+      "id": 5,
+      "name": "Liquidity-Driven Expansion",
+      "category": "caution",
+      "description": "Growth supported by added liquidity"
+    },
+    {
+      "id": 6,
+      "name": "Incentive-Driven Usage",
+      "category": "caution",
+      "description": "Activity driven by incentive programs"
+    },
+    {
+      "id": 7,
+      "name": "Incentive Misalignment",
+      "category": "warning",
+      "description": "Incentives causing unintended behavior"
+    },
+    {
+      "id": 8,
+      "name": "Utility Degradation",
+      "category": "warning",
+      "description": "Declining real usage and adoption"
+    },
+    {
+      "id": 9,
+      "name": "Liquidity Stress",
+      "category": "warning",
+      "description": "Insufficient market depth, high volatility risk"
+    },
+    {
+      "id": 10,
+      "name": "Narrative-Driven Volatility",
+      "category": "caution",
+      "description": "Price movements driven by changing narratives"
+    },
+    {
+      "id": 11,
+      "name": "Structural Transition",
+      "category": "caution",
+      "description": "Fundamental changes in tokenomics or ecosystem"
+    },
+    {
+      "id": 12,
+      "name": "Erosion Phase",
+      "category": "warning",
+      "description": "Sustained decline without stabilization"
+    }
+  ]
+}

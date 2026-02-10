@@ -1,0 +1,15 @@
+.forces-panel { padding:24px; display:flex; flex-direction:column; gap:16px; }
+.fp-label { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); letter-spacing:1.5px; }
+.fp-list { display:flex; flex-direction:column; gap:14px; }
+.force-row { display:grid; grid-template-columns:140px 1fr 56px; align-items:center; gap:12px; }
+.force-name { font-size:13px; color:var(--text-secondary); display:flex; align-items:center; gap:4px; }
+.force-mock-dot { color:var(--amber); font-size:8px; }
+.force-track { position:relative; height:8px; background:rgba(255,255,255,0.04); border-radius:4px; overflow:hidden; }
+.force-center { position:absolute; left:50%; top:0; bottom:0; width:1px; background:var(--text-muted); opacity:0.3; }
+.force-fill { position:absolute; top:0; height:100%; border-radius:4px; transition:width 1.2s ease-out; }
+.force-pos { border-radius:0 4px 4px 0; }
+.force-neg { border-radius:4px 0 0 4px; }
+.force-val { font-family:var(--font-mono); font-size:13px; text-align:right; }
+.fp-footer { display:flex; align-items:center; gap:10px; margin-top:4px; }
+.fp-mock-badge { font-family:var(--font-mono); font-size:10px; color:var(--amber); background:var(--amber-dim); padding:3px 8px; border-radius:6px; }
+.fp-mock-note { font-size:11px; color:var(--text-muted); }

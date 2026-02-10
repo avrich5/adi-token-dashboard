@@ -1,0 +1,51 @@
+/* ADI Token Health — Design Tokens */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg-deep:        #060611;
+  --bg-card:        rgba(12, 14, 28, 0.7);
+  --bg-card-hover:  rgba(18, 20, 38, 0.85);
+  --bg-elevated:    rgba(20, 22, 42, 0.6);
+  --cyan:           #00DCFF;
+  --cyan-dim:       rgba(0, 220, 255, 0.15);
+  --cyan-glow:      rgba(0, 220, 255, 0.08);
+  --cyan-border:    rgba(0, 220, 255, 0.2);
+  --text-primary:   #F0F2F8;
+  --text-secondary: #8B90A8;
+  --text-muted:     #555874;
+  --green:          #00E5A0;
+  --green-dim:      rgba(0, 229, 160, 0.12);
+  --amber:          #FFB547;
+  --amber-dim:      rgba(255, 181, 71, 0.12);
+  --red:            #FF5C5C;
+  --red-dim:        rgba(255, 92, 92, 0.12);
+  --border:         rgba(255, 255, 255, 0.06);
+  --font-display:   'Syne', sans-serif;
+  --font-body:      'DM Sans', sans-serif;
+  --font-mono:      'JetBrains Mono', monospace;
+  --radius:         16px;
+  --radius-sm:      10px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grid background */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%);
+}
+
+#root { position: relative; z-index: 1; }

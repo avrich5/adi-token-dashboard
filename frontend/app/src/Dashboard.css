@@ -1,0 +1,43 @@
+.dashboard { max-width:1400px; margin:0 auto; padding:40px 48px 60px; }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.hero-grid > .state-card  { grid-row: 1 / 3; grid-column: 1; }
+.hero-grid > .metrics-row { grid-column: 2 / 4; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.hero-grid > .forces-panel { grid-column: 2; }
+.hero-grid > .trans-panel  { grid-column: 3; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(20px);
+  transition: background 0.3s, border-color 0.3s;
+}
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--cyan-border);
+}
+
+/* Loading / Error */
+.dash-loading {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 80vh; font-family: var(--font-mono);
+  font-size: 14px; color: var(--text-muted);
+}
+.dash-error {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 80vh; gap: 16px;
+}
+.dash-error span { font-size: 14px; color: var(--red); }
+.dash-error button {
+  padding: 8px 20px; border: 1px solid var(--cyan-border);
+  background: transparent; color: var(--cyan); border-radius: 8px;
+  font-family: var(--font-mono); font-size: 12px; cursor: pointer;
+}

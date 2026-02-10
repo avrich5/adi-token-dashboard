@@ -1,0 +1,95 @@
+{
+  "resistance": {
+    "critical": 0.001,
+    "low": 0.01,
+    "medium": 0.05,
+    "high": 0.15,
+    "description": "Volume / (FDV * 5%) — absorption capacity proxy"
+  },
+  "spread": {
+    "wide": 0.01,
+    "normal": 0.005,
+    "tight": 0.003,
+    "description": "Bid-ask spread as percentage of price"
+  },
+  "btc_correlation": {
+    "low": 0.3,
+    "medium": 0.6,
+    "high": 0.85,
+    "description": "7-day rolling correlation with BTC"
+  },
+  "volatility_ratio": {
+    "low": 0.7,
+    "normal_low": 1.0,
+    "normal_high": 1.3,
+    "high": 2.0,
+    "description": "Current volatility / 14-day MA volatility"
+  },
+  "volume_ratio": {
+    "very_low": 0.3,
+    "low": 0.5,
+    "normal_low": 0.8,
+    "normal_high": 1.5,
+    "high": 2.0,
+    "extreme": 3.0,
+    "description": "Current 24h volume / 7-day MA volume"
+  },
+  "price_change_7d": {
+    "strong_down": -0.15,
+    "down": -0.05,
+    "stable_low": -0.02,
+    "stable_high": 0.02,
+    "up": 0.10,
+    "strong_up": 0.20,
+    "extreme_up": 0.30,
+    "description": "7-day price change as decimal"
+  },
+  "price_change_30d": {
+    "severe_decline": -0.30,
+    "decline": -0.15,
+    "slight_decline": -0.05,
+    "stable": 0.05,
+    "growth": 0.15,
+    "strong_growth": 0.30,
+    "description": "30-day price change as decimal"
+  },
+  "state_categories": {
+    "healthy": [1, 2, 5],
+    "caution": [3, 6, 10, 11],
+    "warning": [4, 7, 8, 9, 12]
+  },
+  "state_names": {
+    "1": "Healthy Utility Expansion",
+    "2": "Utility-Driven Stability",
+    "3": "Speculative Dominance",
+    "4": "Utility-Market Divergence",
+    "5": "Liquidity-Driven Expansion",
+    "6": "Incentive-Driven Usage",
+    "7": "Incentive Misalignment",
+    "8": "Utility Degradation",
+    "9": "Liquidity Stress",
+    "10": "Narrative-Driven Volatility",
+    "11": "Structural Transition",
+    "12": "Erosion Phase"
+  },
+  "state_descriptions": {
+    "1": "Organic growth driven by real usage of the token within the ecosystem",
+    "2": "Stable equilibrium supported by consistent utility usage",
+    "3": "Price driven by speculation rather than fundamentals",
+    "4": "Token price moves independently of broader market, driven by internal factors",
+    "5": "Price supported by newly added liquidity rather than organic demand",
+    "6": "Activity driven by reward programs rather than organic utility",
+    "7": "Incentive programs failing to retain value - rewards sold immediately",
+    "8": "Sustained decline in all metrics without external shock",
+    "9": "Thin liquidity causes disproportionate price impact from small orders",
+    "10": "Chaotic price movements driven by news/social narratives without fundamental driver",
+    "11": "System transitioning from one stable regime to another",
+    "12": "Slow decay without capitulation - gradual loss of interest and value"
+  },
+  "classification_priority": [9, 11, 3],
+  "notes": {
+    "calibration": "These thresholds require calibration on real historical data",
+    "last_updated": "2025-02-10",
+    "version": "0.1"
+  }
+}
