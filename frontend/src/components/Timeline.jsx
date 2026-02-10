@@ -7,9 +7,9 @@ import { useHistoryData } from '../hooks/useHistoryData';
 import './Timeline.css';
 
 const STATE_COLORS = {
-  healthy: { fill: 'rgba(0,229,160,0.08)', stroke: '#00E5A0' },
-  caution: { fill: 'rgba(255,181,71,0.06)', stroke: '#FFB547' },
-  warning: { fill: 'rgba(255,92,92,0.06)', stroke: '#FF5C5C' },
+  healthy: { fill: 'rgba(0,229,160,0.15)', stroke: '#00E5A0' },
+  caution: { fill: 'rgba(255,181,71,0.12)', stroke: '#FFB547' },
+  warning: { fill: 'rgba(255,92,92,0.15)', stroke: '#FF5C5C' },
 };
 
 export default function Timeline() {
@@ -76,8 +76,8 @@ export default function Timeline() {
       <div className="state-ribbon">
         {stateZones.map((z, i) => (
           <div key={i} className={`ribbon-segment cat-${z.category}`}
-               style={{ flex: 1 }}
-               title={`${z.stateName} (${z.x1} → ${z.x2})`}>
+            style={{ flex: 1 }}
+            title={`${z.stateName} (${z.x1} → ${z.x2})`}>
             <span className="ribbon-label">{z.stateName}</span>
           </div>
         ))}
