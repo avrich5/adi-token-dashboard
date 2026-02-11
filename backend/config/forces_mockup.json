@@ -1,0 +1,70 @@
+{
+  "forces": [
+    {
+      "id": "market_pressure",
+      "name": "Market Pressure",
+      "description": "Correlation with BTC and overall crypto market trend",
+      "current_value": -0.3,
+      "direction": "negative",
+      "confidence": 0.85,
+      "source": "BTC -5% this week, correlation 0.45",
+      "data_available": true
+    },
+    {
+      "id": "emission_pressure",
+      "name": "Emission Pressure",
+      "description": "Pressure from upcoming token unlocks",
+      "current_value": -0.15,
+      "direction": "negative",
+      "confidence": 1.0,
+      "source": "2.3% unlock in 45 days",
+      "data_available": true
+    },
+    {
+      "id": "utility_demand",
+      "name": "Utility Demand",
+      "description": "On-chain usage and ecosystem activity",
+      "current_value": 0.2,
+      "direction": "positive",
+      "confidence": 0.3,
+      "source": "Mockup: estimated from volume patterns",
+      "data_available": false,
+      "mockup_note": "Real data requires on-chain analytics integration"
+    },
+    {
+      "id": "mm_activity",
+      "name": "Market Maker Support",
+      "description": "Active liquidity provision and spread management",
+      "current_value": 0.4,
+      "direction": "positive",
+      "confidence": 0.5,
+      "source": "Mockup: inferred from order book shape",
+      "data_available": false,
+      "mockup_note": "Real data requires MM reporting access"
+    },
+    {
+      "id": "narrative",
+      "name": "Narrative Momentum",
+      "description": "News, social sentiment, and market attention",
+      "current_value": 0.1,
+      "direction": "positive",
+      "confidence": 0.4,
+      "source": "Mockup: neutral, no major news",
+      "data_available": false,
+      "mockup_note": "Real data requires sentiment analysis integration"
+    }
+  ],
+  "net_force": {
+    "value": 0.25,
+    "direction": "positive",
+    "interpretation": "Slight positive bias, MM support offsetting market weakness"
+  },
+  "display_config": {
+    "show_confidence": true,
+    "show_mockup_indicator": true,
+    "color_positive": "#10B981",
+    "color_negative": "#EF4444",
+    "color_neutral": "#6B7280",
+    "color_mockup": "#F59E0B"
+  }
+}

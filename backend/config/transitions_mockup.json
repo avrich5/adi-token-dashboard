@@ -1,0 +1,107 @@
+{
+  "transitions": {
+    "1": {
+      "from_state": "Healthy Utility Expansion",
+      "possible_transitions": [
+        {"to": 2, "probability": 0.45, "trigger": "Volume stabilization", "cost": "None", "reversibility": "Easy", "window": "2-4 weeks"},
+        {"to": 3, "probability": 0.20, "trigger": "BTC rally + FOMO", "cost": "Low", "reversibility": "Moderate", "window": "1-2 weeks"},
+        {"to": 5, "probability": 0.15, "trigger": "Large MM injection", "cost": "Medium", "reversibility": "Easy", "window": "Days"}
+      ]
+    },
+    "2": {
+      "from_state": "Utility-Driven Stability",
+      "possible_transitions": [
+        {"to": 1, "probability": 0.35, "trigger": "Organic volume growth, new utility adoption", "cost": "Low", "reversibility": "Easy", "window": "2-4 weeks"},
+        {"to": 3, "probability": 0.15, "trigger": "BTC pump triggers speculation", "cost": "Low", "reversibility": "Moderate", "window": "Days"},
+        {"to": 4, "probability": 0.10, "trigger": "Market crash while utility holds", "cost": "External", "reversibility": "Time-dependent", "window": "1-2 weeks"},
+        {"to": 9, "probability": 0.05, "trigger": "MM withdrawal or exchange issues", "cost": "High", "reversibility": "Difficult", "window": "Hours"}
+      ]
+    },
+    "3": {
+      "from_state": "Speculative Dominance",
+      "possible_transitions": [
+        {"to": 2, "probability": 0.30, "trigger": "Speculation cools, fundamentals reassert", "cost": "Time", "reversibility": "Gradual", "window": "2-4 weeks"},
+        {"to": 10, "probability": 0.25, "trigger": "Conflicting narratives emerge", "cost": "Low", "reversibility": "Moderate", "window": "Days"},
+        {"to": 12, "probability": 0.15, "trigger": "Bubble bursts without support", "cost": "High", "reversibility": "Difficult", "window": "Days-weeks"}
+      ]
+    },
+    "4": {
+      "from_state": "Utility-Market Divergence",
+      "possible_transitions": [
+        {"to": 2, "probability": 0.40, "trigger": "Market recovers, price catches up", "cost": "External", "reversibility": "Easy", "window": "1-4 weeks"},
+        {"to": 8, "probability": 0.20, "trigger": "Prolonged divergence erodes confidence", "cost": "High", "reversibility": "Difficult", "window": "Months"},
+        {"to": 1, "probability": 0.15, "trigger": "Strong utility growth pulls price up", "cost": "Medium", "reversibility": "Easy", "window": "2-4 weeks"}
+      ]
+    },
+    "5": {
+      "from_state": "Liquidity-Driven Expansion",
+      "possible_transitions": [
+        {"to": 2, "probability": 0.35, "trigger": "Liquidity absorbed, price stabilizes", "cost": "None", "reversibility": "Natural", "window": "1-2 weeks"},
+        {"to": 1, "probability": 0.25, "trigger": "Liquidity attracts real users", "cost": "Low", "reversibility": "Easy", "window": "2-4 weeks"},
+        {"to": 3, "probability": 0.20, "trigger": "Liquidity triggers speculation", "cost": "Low", "reversibility": "Moderate", "window": "Days"}
+      ]
+    },
+    "6": {
+      "from_state": "Incentive-Driven Usage",
+      "possible_transitions": [
+        {"to": 1, "probability": 0.30, "trigger": "Users stay after incentives", "cost": "Medium", "reversibility": "Good sign", "window": "Months"},
+        {"to": 7, "probability": 0.35, "trigger": "Users farm and dump", "cost": "High", "reversibility": "Difficult", "window": "Weeks"},
+        {"to": 2, "probability": 0.20, "trigger": "Gradual incentive reduction works", "cost": "Low", "reversibility": "Easy", "window": "Months"}
+      ]
+    },
+    "7": {
+      "from_state": "Incentive Misalignment",
+      "possible_transitions": [
+        {"to": 8, "probability": 0.40, "trigger": "Continued selling pressure", "cost": "High", "reversibility": "Difficult", "window": "Weeks"},
+        {"to": 6, "probability": 0.25, "trigger": "Incentive redesign", "cost": "Medium", "reversibility": "Possible", "window": "Weeks"},
+        {"to": 9, "probability": 0.15, "trigger": "Liquidity drains from selling", "cost": "Critical", "reversibility": "Emergency", "window": "Days"}
+      ]
+    },
+    "8": {
+      "from_state": "Utility Degradation",
+      "possible_transitions": [
+        {"to": 12, "probability": 0.45, "trigger": "Continued decline without intervention", "cost": "Critical", "reversibility": "Very difficult", "window": "Months"},
+        {"to": 2, "probability": 0.20, "trigger": "Major product launch or partnership", "cost": "High", "reversibility": "Possible", "window": "Months"},
+        {"to": 11, "probability": 0.15, "trigger": "Fundamental restructuring begins", "cost": "High", "reversibility": "Uncertain", "window": "Months"}
+      ]
+    },
+    "9": {
+      "from_state": "Liquidity Stress",
+      "possible_transitions": [
+        {"to": 5, "probability": 0.30, "trigger": "Emergency MM support", "cost": "High", "reversibility": "Quick if acted", "window": "Hours-days"},
+        {"to": 12, "probability": 0.35, "trigger": "No intervention, spiral continues", "cost": "Critical", "reversibility": "Very difficult", "window": "Days"},
+        {"to": 2, "probability": 0.15, "trigger": "Organic buyers step in", "cost": "External", "reversibility": "Possible", "window": "Days-weeks"}
+      ]
+    },
+    "10": {
+      "from_state": "Narrative-Driven Volatility",
+      "possible_transitions": [
+        {"to": 2, "probability": 0.35, "trigger": "Narratives fade, fundamentals return", "cost": "Time", "reversibility": "Natural", "window": "1-2 weeks"},
+        {"to": 3, "probability": 0.25, "trigger": "One narrative wins, speculation follows", "cost": "Low", "reversibility": "Moderate", "window": "Days"},
+        {"to": 9, "probability": 0.10, "trigger": "Negative narrative causes panic", "cost": "High", "reversibility": "Difficult", "window": "Hours-days"}
+      ]
+    },
+    "11": {
+      "from_state": "Structural Transition",
+      "possible_transitions": [
+        {"to": 2, "probability": 0.30, "trigger": "Transition completes successfully", "cost": "Varies", "reversibility": "New baseline", "window": "Weeks-months"},
+        {"to": 1, "probability": 0.25, "trigger": "Transition unlocks growth", "cost": "Varies", "reversibility": "Positive", "window": "Weeks-months"},
+        {"to": 8, "probability": 0.20, "trigger": "Transition fails or stalls", "cost": "High", "reversibility": "Difficult", "window": "Months"}
+      ]
+    },
+    "12": {
+      "from_state": "Erosion Phase",
+      "possible_transitions": [
+        {"to": 11, "probability": 0.25, "trigger": "Major pivot or restructuring", "cost": "Very high", "reversibility": "Uncertain", "window": "Months"},
+        {"to": 9, "probability": 0.30, "trigger": "Final liquidity crisis", "cost": "Critical", "reversibility": "Near impossible", "window": "Weeks"},
+        {"to": 2, "probability": 0.10, "trigger": "Black swan positive event", "cost": "External luck", "reversibility": "Possible", "window": "Unknown"}
+      ]
+    }
+  },
+  "metadata": {
+    "note": "Probabilities are illustrative mockup data, not calibrated on historical transitions",
+    "cost_scale": ["None", "Low", "Medium", "High", "Critical", "External", "Varies"],
+    "reversibility_scale": ["Easy", "Moderate", "Difficult", "Very difficult", "Near impossible", "Uncertain"],
+    "window_units": "Typical timeframe for transition to occur once triggered"
+  }
+}

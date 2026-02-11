@@ -33,15 +33,22 @@ app = FastAPI(
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176", "http://localhost:3000", "http://localhost:8003", "https://adi-token-dashboard.vercel.app"],
+    allow_origins=[
+        "http://localhost:5173", "http://localhost:5174", "http://localhost:5175",
+        "http://localhost:5176", "http://localhost:3000", "http://localhost:8003",
+        "https://adi-token-dashboard.vercel.app",
+        "https://adi-token-dashboard-git-main-andriys-projects-6f8f706b.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Configuration paths
-BASE_DIR = Path(__file__).parent.parent
+# Configuration paths — check local first (deploy), then parent (dev)
+BASE_DIR = Path(__file__).parent
 CONFIG_DIR = BASE_DIR / "config"
+if not CONFIG_DIR.exists():
+    CONFIG_DIR = BASE_DIR.parent / "config"
 
 # ============================================================================
 # SIMPLE CACHE

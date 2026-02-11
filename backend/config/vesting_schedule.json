@@ -1,0 +1,83 @@
+{
+  "tge_date": "2025-12-15",
+  "total_supply": 1000000000,
+  "allocations": [
+    {
+      "id": "community",
+      "name": "Community Fund",
+      "percentage": 35,
+      "tge_release_pct": 1.39,
+      "cliff_months": 0,
+      "vesting_months": 72,
+      "vesting_type": "linear",
+      "color": "#10B981",
+      "description": "Community incentives and ecosystem growth"
+    },
+    {
+      "id": "treasury",
+      "name": "Treasury Reserves",
+      "percentage": 25,
+      "tge_release_pct": 5,
+      "cliff_months": 0,
+      "vesting_months": 108,
+      "vesting_type": "linear",
+      "color": "#3B82F6",
+      "description": "Long-term foundation treasury"
+    },
+    {
+      "id": "private",
+      "name": "Private Investors",
+      "percentage": 12,
+      "tge_release_pct": 0,
+      "cliff_months": 12,
+      "vesting_months": 72,
+      "vesting_type": "linear",
+      "color": "#8B5CF6",
+      "description": "Early private sale participants"
+    },
+    {
+      "id": "partnerships",
+      "name": "Partnerships",
+      "percentage": 10,
+      "tge_release_pct": 0,
+      "cliff_months": 12,
+      "vesting_months": 72,
+      "vesting_type": "linear",
+      "color": "#F59E0B",
+      "description": "Strategic partnership allocations"
+    },
+    {
+      "id": "team",
+      "name": "Team",
+      "percentage": 10,
+      "tge_release_pct": 0,
+      "cliff_months": 12,
+      "vesting_months": 72,
+      "vesting_type": "linear",
+      "color": "#EC4899",
+      "description": "Core team compensation"
+    },
+    {
+      "id": "incentives",
+      "name": "Token Incentivization Pool",
+      "percentage": 4,
+      "tge_release_pct": 100,
+      "cliff_months": 0,
+      "vesting_months": 0,
+      "vesting_type": "immediate",
+      "color": "#14B8A6",
+      "description": "Staking and liquidity mining rewards"
+    },
+    {
+      "id": "liquidity",
+      "name": "Liquidity",
+      "percentage": 4,
+      "tge_release_pct": 100,
+      "cliff_months": 0,
+      "vesting_months": 0,
+      "vesting_type": "immediate",
+      "color": "#06B6D4",
+      "description": "Exchange and DEX liquidity provision"
+    }
+  ]
+}
