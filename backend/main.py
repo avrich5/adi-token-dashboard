@@ -33,12 +33,7 @@ app = FastAPI(
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173", "http://localhost:5174", "http://localhost:5175",
-        "http://localhost:5176", "http://localhost:3000", "http://localhost:8003",
-        "https://adi-token-dashboard.vercel.app",
-        "https://adi-token-dashboard-git-main-andriys-projects-6f8f706b.vercel.app",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
