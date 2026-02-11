@@ -1,0 +1,143 @@
+.ft-section {
+  background: rgba(15, 16, 28, 0.65);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 20px 20px 14px;
+}
+
+.ft-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ft-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #C8CAD4;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.ft-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ft-badge {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.03em;
+}
+.ft-badge.model {
+  background: rgba(0, 229, 160, 0.1);
+  color: #00E5A0;
+  border: 1px solid rgba(0, 229, 160, 0.2);
+}
+.ft-badge.mockup {
+  background: rgba(251, 191, 36, 0.08);
+  color: #FBBF24;
+  border: 1px solid rgba(251, 191, 36, 0.15);
+}
+
+.ft-chart-wrap {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.ft-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.ft-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #8B8EA3;
+}
+.ft-legend-item.net {
+  opacity: 0.5;
+}
+
+.ft-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.ft-legend-name {
+  white-space: nowrap;
+}
+.ft-legend-name.mockup {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Tooltip */
+.ft-tooltip {
+  background: rgba(10, 11, 20, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  min-width: 200px;
+}
+
+.ft-tooltip-date {
+  color: #8B8EA3;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 6px;
+}
+
+.ft-tooltip-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 5px 0;
+}
+
+.ft-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+}
+.ft-tooltip-row.net {
+  padding-top: 2px;
+}
+
+.ft-tooltip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.ft-tooltip-name {
+  color: #C8CAD4;
+  flex: 1;
+}
+
+.ft-tooltip-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+.ft-loading, .ft-error {
+  text-align: center;
+  padding: 40px;
+  color: #555874;
+  font-size: 13px;
+}

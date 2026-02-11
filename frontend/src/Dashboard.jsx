@@ -6,6 +6,7 @@ import MetricCard from './components/MetricCard';
 import ForcesPanel from './components/ForcesPanel';
 import TransitionsPanel from './components/TransitionsPanel';
 import Timeline from './components/Timeline';
+import ForcesTimeline from './components/ForcesTimeline';
 import Footer from './components/Footer';
 import './Dashboard.css';
 
@@ -46,8 +47,8 @@ export default function Dashboard() {
             label="MARKET CAP" value={fmt.usdCompact(price.market_cap)} sub="Fully diluted"
           />
           <MetricCard
-            label="MARKET RESISTANCE" value={fmt.num(resistance.value)} sub="Absorption capacity"
-            change={resistance.value < 0.1 ? '▾ Critically low' : resistance.value < 0.3 ? '◈ Low' : '▴ Adequate'}
+            label="RESISTANCE INDEX" value={fmt.num(resistance.value)} sub="Market resilience"
+            change={resistance.value < 0.1 ? '▾ Fragile' : resistance.value < 0.3 ? '◈ Low' : resistance.value < 0.6 ? '◈ Moderate' : '▴ Resilient'}
             changeColor={resistance.value < 0.1 ? 'red' : resistance.value < 0.3 ? 'amber' : 'green'}
           />
         </div>
@@ -57,6 +58,7 @@ export default function Dashboard() {
       </div>
 
       <Timeline />
+      <ForcesTimeline />
 
       <Footer />
     </div>

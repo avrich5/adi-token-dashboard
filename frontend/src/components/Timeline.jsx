@@ -20,22 +20,16 @@ export default function Timeline() {
     if (!data?.timeline?.length) return { chartData: [], stateZones: [] };
     const tl = data.timeline;
 
-    // Normalize resistance to 0-1 via log scale for overlay
-    const resValues = tl.map(d => d.resistance).filter(v => v > 0);
-    const logMin = Math.log(Math.min(...resValues) || 1);
-    const logMax = Math.log(Math.max(...resValues) || 2);
-    const logRange = logMax - logMin || 1;
-
+    // Resistance Index already [0,1] (tanh-based), no normalization needed
     const cd = tl.map(d => ({
       date: d.date,
       dateShort: d.date.slice(5), // MM-DD
       price: d.price,
       resistance: d.resistance,
-      resistanceNorm: d.resistance > 0
-        ? Math.max(0, Math.min(1, (Math.log(d.resistance) - logMin) / logRange))
-        : 0,
+      resistanceNorm: d.resistance,  // already 0-1
       stateId: d.state_id,
       stateName: d.state_name,
+      shortName: d.short_name || d.state_name,
       category: d.category,
       change7d: d.change_7d_pct,
       volumeUsd: d.volume_usd,
@@ -51,6 +45,7 @@ export default function Timeline() {
         if (current) current.x2 = cd[i - 1].date;
         current = {
           stateId: stId, stateName: cd[i].stateName,
+          shortName: cd[i].shortName,
           category: cat, x1: cd[i].date, x2: cd[i].date,
         };
         zones.push(current);
@@ -80,7 +75,7 @@ export default function Timeline() {
             <div key={i} className={`ribbon-segment cat-${z.category}`}
               style={{ flex: days }}
               title={`${z.stateName} (${z.x1} → ${z.x2})`}>
-              {days > 3 && <span className="ribbon-label">{z.stateName}</span>}
+              {days > 5 && <span className="ribbon-label">{z.shortName}</span>}
             </div>
           );
         })}
@@ -137,7 +132,7 @@ export default function Timeline() {
 
       <div className="timeline-legend">
         <span className="legend-item"><span className="legend-line price-line" /> Price (USD)</span>
-        <span className="legend-item"><span className="legend-line resistance-line" /> Market Resistance (normalized)</span>
+        <span className="legend-item"><span className="legend-line resistance-line" /> Resistance Index</span>
       </div>
     </section>
   );
@@ -162,7 +157,7 @@ function CustomTooltip({ active, payload, label }) {
       </div>
       <div className="tl-tooltip-row">
         <span>Resistance</span>
-        <strong>{d.resistance.toLocaleString()}</strong>
+        <strong>{d.resistance.toFixed(3)}</strong>
       </div>
       <div className="tl-tooltip-row">
         <span>Volume (USD)</span>

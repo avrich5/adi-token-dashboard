@@ -1,0 +1,43 @@
+мне кажется зоны стабилтности и нестабильности не совпадают с здравым смыслом. Когда Resistance маленькая это же нестабильность?15:04Ты прав. Проблема в двух местах:
+
+State classification — класифікатор зараз спрощений і не враховує resistance як фактор нестабільності. Низький resistance (125, 400) при низькому volume ($3K, $10K) — це liquidity stress, а не "Utility-Driven Stability".
+Фонові зони на графіку — вони пофарбовані за category стейту (healthy/caution/warning), але самі стейти визначені неправильно.
+
+Давай подивлюся на класифікатор і поправлю логіку:Used Desktop Commander integrationDStart SearchResultDRead File or URLResultDoneТепер подивлюся пороги:Used Desktop Commander integrationDStart SearchResultDStart SearchResultDRead File or URLResultDRead File or URLResultDList Directory ContentsResultDStart SearchResultDoneJSON конфіги загружені в код, значить вони або інлайнові, або вбудовані в load_config. Подивлюся:Used Desktop Commander integrationDRead File or URLResultDRead File or URLResultDoneТепер бачу проблему. Пороги resistance задані як critical: 0.5, medium: 2.0, high: 3.0. Але реальні значення resistance на timeline — від 100 до 67,000. Це зовсім інший масштаб, бо в /api/history resistance рахується інакше: volume_usd / (price * 20).
+Проблема в тому, що в /api/history ми рахуємо resistance по-своєму, а класифікатор порівнює зі порогами, які калібровані під іншу формулу (hero section). Давай подивлюся на обидва місця:Used Desktop Commander integrationDStart SearchResultDRead File or URLResultDoneТепер бачу всю картину. Ось що неправильно:
+Resistance в history = vol / (price * 20), що дає значення типу 125, 1500, 67000. А пороги в state_thresholds.json — critical: 0.5, high: 3.0. Це значить, що майже все проходить як resistance > high, і стейти виглядають "здоровими" навіть коли volume мізерний ($3K).
+Крім того, hero screen рахує resistance інакше (через orderbook spread або щось інше).
+Потрібно привести resistance до однакового масштабу. Найпростіше — нормалізувати resistance в history до тієї ж шкали, що й hero. Давай подивлюся, як resistance рахується для hero:Used Desktop Commander integrationDStart SearchResultDRead File or URLResultDoneТепер все ясно. Hero resistance = cumulative_liquidity_in_5%_asks / volume_24h — це число типу 0.06 (як показано на дашборді). А History resistance = volume_usd / (price * 20) — абсолютно інша формула і масштаб (сотні-тисячі).
+Рішення: для history треба рахувати resistance за тим же принципом. Але в history немає orderbook. Тому краще зробити спрощений proxy через volume, який дає подібний масштаб і правильний смисл:
+
+Низький volume → низька resistance → нестабільність
+Високий volume → висока resistance → стабільність
+
+Формула: resistance = volume_usd / (market_cap_proxy * 0.05), де market_cap_proxy ≈ price * total_supply. Або ще простіше — просто нормалізувати volume до тієї ж шкали.Edit BlockDEdit BlockResultDoneТепер resistance буде в масштабі 0.001–1.0, що відповідає порогам (critical: 0.5, high: 3.0). Але порогами classification — critical 0.5 — це дуже високо для такого тонкого ринку. Зараз ADI volume $1.9M/day при FDV ~$135M дає resistance ≈ 0.28. А дні з $3K volume дадуть ≈ 0.00004.
+Треба ще підкоригувати пороги щоб вони відповідали реальним значенням ADI:Edit BlockDEdit BlockResultDoneТепер перезапусти бекенд:
+lsof -ti:8002 | xargs kill -9 && cd /Users/andriy/VisualStudio/adi-token-health/backend && python main.py
+Після цього рефрешни сторінку. Тепер:
+
+Дні з volume $3K–$10K (resistance ~0.00004–0.0001) → Liquidity Stress (warning/red зона)
+Дні з volume $40K–$200K (resistance ~0.0005–0.003) → caution зони
+Дні з volume $1M+ (resistance ~0.15+) → healthy зони
+
+Це вже відповідає здоровому глузду: тонкий ринок = нестабільність.15:10Вже краще — масштаб resistance тепер правильний (0.001–0.5). Але є проблема: на timeline видно тільки 3 стейти (Incentive-Driven Usage як fallback, і Liquidity-Driven Expansion), а фонові зони не відрізняються кольором — все виглядає однаково.
+Головна проблема — класифікатор занадто часто падає у fallback "Incentive-Driven Usage" (state 6). Дні з resistance 0.001 і volume $2.5K мають бути Liquidity Stress, а не "Incentive-Driven Usage".
+Подивлюся чому Liquidity Stress не спрацьовує:Used Desktop Commander integrationDRead File or URLResultDRead File or URLResultDoneОсь проблема: Liquidity Stress потребує обох умов: resistance < 0.001 І volume_ratio < 0.3. Але volume_ratio — це поточний volume / 7-day average. Якщо весь тиждень volume був низьким, ratio буде ~1.0, і Liquidity Stress не спрацює, хоча ринок об'єктивно тонкий.
+Для тонкого токена треба розділити:
+
+Абсолютний liquidity stress — resistance сама по собі критично низька
+Відносний stress — volume впав відносно середнього
+
+Переписую класифікатор з більш розумною логікою:Edit BlockDEdit BlockResultDoneТепер логіка така:
+
+resistance < 0.001 → Liquidity Stress (warning/red) — $2.5K volume дні
+resistance 0.001–0.01 + volume drop → Liquidity Stress
+resistance 0.01–0.05 → Incentive-Driven Usage (caution/amber)
+resistance 0.05–0.15 + stable price → Utility-Driven Stability (healthy)
+resistance 0.15+ + price growth → Liquidity-Driven Expansion (healthy)
+
+Перезапусти бекенд:
+lsof -ti:8002 | xargs kill -9 && cd /Users/andriy/VisualStudio/adi-token-health/backend && python main.py
+Тепер на timeline мають з'явитися червоні зони в середині грудня–початку січня (коли volume був $2–10K), зелені зони в кінці січня (коли volume виріс до $3M), і жовті між ними.

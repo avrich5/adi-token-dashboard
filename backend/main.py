@@ -250,19 +250,21 @@ async def fetch_kraken_orderbook(pair: str = "ADIUSD") -> dict:
 # ============================================================================
 
 def calculate_resistance(orderbook: dict, current_price: float, volume_24h: float) -> float:
-    """Calculate Market Resistance = cumulative_liquidity_5% / volume_24h"""
-    target_price = current_price * 1.05
-    cumulative_liquidity = 0
-    for price, volume in orderbook["asks"]:
-        if price <= target_price:
-            cumulative_liquidity += price * volume
-        else:
-            break
+    """Resistance Index (tanh-based): 1 - tanh(α × spread_impact / volume)
+    Measures how resilient the market is to price movement.
+    1.0 = max stability, 0.0 = fragile/no liquidity"""
+    import math
+    # Use orderbook spread as proxy for price impact
+    best_bid = orderbook["bids"][0][0] if orderbook["bids"] else current_price
+    best_ask = orderbook["asks"][0][0] if orderbook["asks"] else current_price
+    spread_pct = (best_ask - best_bid) / current_price if current_price > 0 else 0
+    
+    alpha = 500_000
     if volume_24h > 0:
-        resistance = cumulative_liquidity / volume_24h
+        resistance = 1.0 - math.tanh(alpha * spread_pct / volume_24h)
     else:
-        resistance = 0.5
-    return round(resistance, 2)
+        resistance = 0.0
+    return round(max(0.0, min(1.0, resistance)), 4)
 
 def calculate_spread(orderbook: dict, current_price: float) -> float:
     """Calculate bid-ask spread percentage"""
@@ -312,29 +314,67 @@ def calculate_market_pressure(price_data: dict) -> float:
     return round(max(-1.0, min(1.0, total)), 2)
 
 
-def calculate_emission_pressure(vesting_data: dict) -> float:
-    """Calculate Emission Pressure force (-1.0 to +1.0)"""
-    today = datetime.now()
-    upcoming_emissions = 0
+def calculate_emission_pressure(vesting_data: dict, ref_date: datetime = None) -> float:
+    """
+    Calculate Emission Pressure using F = m × a model.
+    m = monthly_unlock / circulating (mass = fraction of supply entering market)
+    a = 1/vesting_months_remaining (acceleration = how fast supply dilutes)
+    Result is always negative (emission = selling pressure), range -1.0 to 0.0
+    """
+    if ref_date is None:
+        ref_date = datetime.now()
     total_supply = vesting_data["total_supply"]
     tge_date = datetime.fromisoformat(vesting_data["tge_date"])
-    for allocation in vesting_data["allocations"]:
-        cliff_months = allocation["cliff_months"]
-        vesting_months = allocation["vesting_months"]
-        months_since_tge = (today.year - tge_date.year) * 12 + today.month - tge_date.month
-        if months_since_tge >= cliff_months and vesting_months > 0:
-            allocation_amount = (allocation["percentage"] / 100) * total_supply
-            monthly_unlock = allocation_amount / vesting_months
-            upcoming_emissions += monthly_unlock
-    circulating = total_supply * 0.1
-    emission_ratio = upcoming_emissions / circulating if circulating > 0 else 0
-    if emission_ratio > 0.05:
-        pressure = -0.8
-    elif emission_ratio < 0.01:
-        pressure = 0.5
+    months_since_tge = (ref_date.year - tge_date.year) * 12 + ref_date.month - tge_date.month
+
+    # Calculate real circulating supply
+    circulating = 0
+    monthly_unlock_total = 0
+    for alloc in vesting_data["allocations"]:
+        alloc_amount = (alloc["percentage"] / 100) * total_supply
+        tge_release = (alloc["tge_release_pct"] / 100) * alloc_amount
+        circulating += tge_release
+
+        cliff = alloc["cliff_months"]
+        vest = alloc["vesting_months"]
+        if vest > 0 and months_since_tge > cliff:
+            vesting_elapsed = min(months_since_tge - cliff, vest)
+            remaining_after_tge = alloc_amount - tge_release
+            monthly_rate = remaining_after_tge / vest
+            circulating += monthly_rate * vesting_elapsed
+            # Only count ongoing unlocks (not fully vested)
+            if vesting_elapsed < vest:
+                monthly_unlock_total += monthly_rate
+
+    if circulating <= 0:
+        return 0.0
+
+    # m = mass: what fraction of circulating supply unlocks per month
+    mass = monthly_unlock_total / circulating
+
+    # a = acceleration: inverse of remaining vesting time (shorter = faster pressure)
+    # Average remaining vesting months across active allocations
+    remaining_months_list = []
+    for alloc in vesting_data["allocations"]:
+        cliff = alloc["cliff_months"]
+        vest = alloc["vesting_months"]
+        if vest > 0 and months_since_tge > cliff:
+            elapsed = min(months_since_tge - cliff, vest)
+            remaining = vest - elapsed
+            if remaining > 0:
+                remaining_months_list.append(remaining)
+
+    if remaining_months_list:
+        avg_remaining = sum(remaining_months_list) / len(remaining_months_list)
+        acceleration = 1.0 / max(avg_remaining, 1)
     else:
-        pressure = 0.3 - (emission_ratio * 10)
-    return round(max(-1.0, min(1.0, pressure)), 2)
+        acceleration = 0.0
+
+    # F = m × a, scaled to -1..0 range (emission is always negative pressure)
+    # Scale: mass ~0.05 (5%/month) × accel ~0.015 (1/70mo) = ~0.00075
+    # Normalize: multiply by 500 to get meaningful range
+    force = -(mass * acceleration * 500)
+    return round(max(-1.0, min(0.0, force)), 3)
 
 def get_emission_info(vesting_data: dict) -> dict:
     """Get emission schedule info for dashboard"""
@@ -449,6 +489,7 @@ def classify_state(metrics: dict, forces: dict) -> dict:
     return {
         "id": state_id,
         "name": state_info["name"] if state_info else "Unknown",
+        "short_name": state_info.get("short_name", state_info["name"]) if state_info else "Unknown",
         "category": state_info["category"] if state_info else "caution",
         "description": state_info["description"] if state_info else "",
         "confidence": confidence
@@ -520,7 +561,6 @@ async def get_history():
 
         # Compute 7-day rolling average volume for each day
         timeline = []
-        emission_pressure = calculate_emission_pressure(vesting_schedule)
         # Utility/narrative mockup forces (constant for history)
         mock_forces = {f["id"]: f["current_value"] for f in forces_config["forces"]}
 
@@ -533,14 +573,19 @@ async def get_history():
             avg_vol = sum(c["volume"] * c["close"] for c in lookback) / len(lookback) if lookback else vol
             volume_ratio = vol / avg_vol if avg_vol > 0 else 1.0
 
-            # Simplified resistance proxy (same scale as hero: cumulative_liq / volume)
-            # Without orderbook we approximate: vol_usd / (fully_diluted_value * 0.05)
-            # ADI fully_diluted ~51M tokens. Lower volume = lower resistance = more fragile
-            fully_diluted_value = price * 51_000_000
-            if fully_diluted_value > 0 and vol > 0:
-                resistance_approx = round(vol / (fully_diluted_value * 0.05), 4)
+            # Resistance Index (tanh-based): measures market resilience to price movement
+            # Resistance = 1 - tanh(α × |High-Low|/Close / Volume_USD)
+            # Uses high-low range (not close-to-close) to capture orderbook depth reality:
+            # flash wicks reveal thin orderbook even if close is stable
+            # ΔPrice=0 + Volume>0 → Resistance=1.0 (max stability)
+            # Big range + small Volume → Resistance≈0 (fragile)
+            import math
+            price_range_pct = (candle["high"] - candle["low"]) / price if price > 0 else 0
+            alpha = 500_000  # scaling: calibrated so typical ADI day ≈ 0.3-0.7
+            if vol > 0:
+                resistance_index = round(1.0 - math.tanh(alpha * price_range_pct / vol), 4)
             else:
-                resistance_approx = 0.01
+                resistance_index = 0.0  # no volume = no resistance
 
             # 7-day price change
             if i >= 7:
@@ -564,9 +609,39 @@ async def get_history():
             else:
                 market_pressure = round(change_7d * 3, 2)
 
+            # ── Force decomposition: F = m × a model ──
+            # m = mass (tokens involved, relative to circulating)
+            # a = acceleration (speed of impact on price)
+            
+            # 1. Market Pressure (real): mass = volume_ratio, accel = momentum
+            m_market = volume_ratio
+            a_market = change_7d * 5 if i >= 7 else 0
+            f_market = round(max(-1, min(1, m_market * a_market)), 3)
+
+            # 2. Emission Pressure (real): calculated per-day based on vesting schedule
+            candle_date = datetime.fromisoformat(candle["date"])
+            f_emission = calculate_emission_pressure(vesting_schedule, ref_date=candle_date)
+
+            # 3. Utility Demand (mockup): mass = adoption proxy, accel = usage growth
+            m_utility = 0.15
+            a_utility = (change_7d * 0.5 + (volume_ratio - 1) * 0.3) if i >= 7 else 0.1
+            f_utility = round(max(-1, min(1, m_utility * a_utility * 3)), 3)
+
+            # 4. MM Activity (mockup): mass = small, accel = very fast
+            m_mm = 0.08
+            a_mm = (volume_ratio - 0.7) * 5
+            f_mm = round(max(-1, min(1, m_mm * a_mm)), 3)
+
+            # 5. Narrative (mockup): mass = large on events, accel = medium
+            abs_change = abs(change_7d) if i >= 7 else 0
+            m_narrative = min(1.0, abs_change * 8)
+            a_narrative = 0.3 if abs_change > 0.03 else 0.05
+            f_narrative_dir = 1 if change_7d >= 0 else -1
+            f_narrative = round(max(-1, min(1, m_narrative * a_narrative * f_narrative_dir)), 3)
+
             # Classify state
             metrics = {
-                "resistance": resistance_approx,
+                "resistance": resistance_index,
                 "volume_ratio": round(volume_ratio, 2),
                 "price_change_7d": round(change_7d, 4),
                 "price_change_30d": round(change_30d, 4),
@@ -574,8 +649,8 @@ async def get_history():
                 "volatility_ratio": 1.0
             }
             force_vals = {
-                "market_pressure": market_pressure,
-                "emission_pressure": emission_pressure,
+                "market_pressure": f_market,
+                "emission_pressure": f_emission,
                 **mock_forces
             }
             state = classify_state(metrics, force_vals)
@@ -585,12 +660,20 @@ async def get_history():
                 "timestamp": candle["timestamp"],
                 "price": round(price, 4),
                 "volume_usd": round(vol, 0),
-                "resistance": resistance_approx,
+                "resistance": resistance_index,
                 "state_id": state["id"],
                 "state_name": state["name"],
+                "short_name": state["short_name"],
                 "category": state["category"],
                 "confidence": state["confidence"],
-                "change_7d_pct": round(change_7d * 100, 2)
+                "change_7d_pct": round(change_7d * 100, 2),
+                "forces": {
+                    "market_pressure": {"value": f_market, "is_mockup": False},
+                    "emission_pressure": {"value": f_emission, "is_mockup": False},
+                    "utility_demand": {"value": f_utility, "is_mockup": True},
+                    "mm_activity": {"value": f_mm, "is_mockup": True},
+                    "narrative": {"value": f_narrative, "is_mockup": True}
+                }
             })
 
         result = {

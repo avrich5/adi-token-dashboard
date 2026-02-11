@@ -3,72 +3,84 @@
     {
       "id": 1,
       "name": "Healthy Utility Expansion",
+      "short_name": "Expansion",
       "category": "healthy",
       "description": "Organic growth driven by real usage"
     },
     {
       "id": 2,
       "name": "Utility-Driven Stability",
+      "short_name": "Stability",
       "category": "healthy",
       "description": "Stable equilibrium with consistent utility"
     },
     {
       "id": 3,
       "name": "Speculative Dominance",
+      "short_name": "Speculation",
       "category": "caution",
       "description": "Price driven by speculation, not fundamentals"
     },
     {
       "id": 4,
       "name": "Utility-Market Divergence",
+      "short_name": "Divergence",
       "category": "caution",
       "description": "Internal factors dominate market movements"
     },
     {
       "id": 5,
       "name": "Liquidity-Driven Expansion",
+      "short_name": "Expansion",
       "category": "healthy",
       "description": "Growth supported by added liquidity"
     },
     {
       "id": 6,
       "name": "Incentive-Driven Usage",
+      "short_name": "Incentive Use",
       "category": "caution",
       "description": "Activity driven by incentive programs"
     },
     {
       "id": 7,
       "name": "Incentive Misalignment",
+      "short_name": "Misalignment",
       "category": "warning",
       "description": "Incentives causing unintended behavior"
     },
     {
       "id": 8,
       "name": "Utility Degradation",
+      "short_name": "Degradation",
       "category": "warning",
       "description": "Declining real usage and adoption"
     },
     {
       "id": 9,
       "name": "Liquidity Stress",
+      "short_name": "Stress",
       "category": "warning",
       "description": "Insufficient market depth, high volatility risk"
     },
     {
       "id": 10,
       "name": "Narrative-Driven Volatility",
+      "short_name": "Volatility",
       "category": "caution",
       "description": "Price movements driven by changing narratives"
     },
     {
       "id": 11,
       "name": "Structural Transition",
+      "short_name": "Transition",
       "category": "caution",
       "description": "Fundamental changes in tokenomics or ecosystem"
     },
     {
       "id": 12,
       "name": "Erosion Phase",
+      "short_name": "Erosion",
       "category": "warning",
       "description": "Sustained decline without stabilization"
     }
