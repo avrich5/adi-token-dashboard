@@ -581,7 +581,7 @@ async def get_history():
             # Big range + small Volume → Resistance≈0 (fragile)
             import math
             price_range_pct = (candle["high"] - candle["low"]) / price if price > 0 else 0
-            alpha = 500_000  # scaling: calibrated so typical ADI day ≈ 0.3-0.7
+            alpha = 200000  # scaling: calibrated so typical ADI day ≈ 0.3-0.7
             if vol > 0:
                 resistance_index = round(1.0 - math.tanh(alpha * price_range_pct / vol), 4)
             else:
