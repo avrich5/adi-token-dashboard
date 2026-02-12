@@ -16,7 +16,7 @@ export default function StateCard({ state, resistance }) {
   return (
     <div className="state-card card">
       <InfoDot text={INFO_TEXTS.stateCard} />
-      <div className="state-label">ECONOMIC STATE</div>
+      <div className="state-label">CURRENT STATE</div>
       <div className="state-ring-wrap">
         <svg viewBox="0 0 200 200" className="state-ring">
           <circle cx="100" cy="100" r={R} fill="none" stroke="var(--border)" strokeWidth="6"

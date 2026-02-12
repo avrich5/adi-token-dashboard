@@ -94,7 +94,7 @@ export default function Timeline() {
   return (
     <section className="timeline-section">
       <div className="timeline-header">
-        <h2 className="timeline-title">Economic State Timeline <InfoDot text={INFO_TEXTS.timeline} position="inline" /></h2>
+        <h2 className="timeline-title">State Timeline <InfoDot text={INFO_TEXTS.timeline} position="inline" /></h2>
         <span className="timeline-sub">{data.period_days} days · {data.data_source}</span>
       </div>
 

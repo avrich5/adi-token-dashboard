@@ -150,7 +150,7 @@ export default function ScenariosValidation() {
           />
         </div>
         <div className="sv-kb-text">
-          Validated economic memory: <strong>{summary?.knowledge_units ?? 0}</strong> of{' '}
+          Validated state memory: <strong>{summary?.knowledge_units ?? 0}</strong> of{' '}
           {summary?.validatable_count ?? 0} scenarios ({summary?.validation_rate ?? 0}%)
           <span className="sv-kb-insight">
             · Each validated day = knowledge unit for governance decisions
