@@ -264,7 +264,7 @@ This dashboard is **NOT**:
 - A speculation tool (no predictions)
 
 This dashboard **IS**:
-- An economic observability layer
+- An Intelligence Semantic Layer
 - A capacity planning tool for token unlocks
 - A governance decision-support system
 - A state transition modeling interface

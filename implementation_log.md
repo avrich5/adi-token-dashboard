@@ -1,6 +1,6 @@
 # ADI Token Health Dashboard — Implementation Log
 
-**Project:** Economic Observability Layer for ADI Token Governance
+**Project:** Intelligence Semantic Layer for ADI Token Governance
 **Status:** MVP in active development
 **Last updated:** 2026-02-11
 **Repository:** `/Users/andriy/VisualStudio/adi-token-health`

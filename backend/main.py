@@ -1,6 +1,6 @@
 """
 ADI Token Health Dashboard - Backend API
-Economic Observability Layer for Tokenomics Governance
+Intelligence Semantic Layer for Tokenomics Governance
 """
 
 from fastapi import FastAPI, HTTPException
@@ -26,7 +26,7 @@ KRAKEN_API_SECRET = os.getenv("KRAKEN_API_SECRET", "")
 
 app = FastAPI(
     title="ADI Token Health API",
-    description="Economic Observability Layer for ADI Token",
+    description="Intelligence Semantic Layer for ADI Token",
     version="0.2.0"
 )
 
