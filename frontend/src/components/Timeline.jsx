@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ComposedChart, Area, Line, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea
@@ -14,21 +14,40 @@ const STATE_COLORS = {
   warning: { fill: 'rgba(255,92,92,0.15)', stroke: '#FF5C5C' },
 };
 
+const STATE_ICONS = {
+  healthy: '↗',
+  'healthy-warm': '═',
+  caution: '⬌',
+  warning: '↘',
+};
+
+function getIconKey(category, stateId) {
+  if (category === 'healthy' && WARM_HEALTHY_IDS.has(stateId)) return 'healthy-warm';
+  return category;
+}
+
+// IDs that get the warm-green (yellowish) variant instead of pure green
+const WARM_HEALTHY_IDS = new Set([2]); // Utility-Driven Stability
+
+function getCatClass(category, stateId) {
+  if (category === 'healthy' && WARM_HEALTHY_IDS.has(stateId)) return 'cat-healthy-warm';
+  return `cat-${category}`;
+}
+
 export default function Timeline() {
   const { data, error, loading } = useHistoryData();
+  const [hoveredZone, setHoveredZone] = useState(null);
 
-  // Build chart data + state zones
-  const { chartData, stateZones } = useMemo(() => {
-    if (!data?.timeline?.length) return { chartData: [], stateZones: [] };
+  const { chartData, stateZones, uniqueStates } = useMemo(() => {
+    if (!data?.timeline?.length) return { chartData: [], stateZones: [], uniqueStates: [] };
     const tl = data.timeline;
 
-    // Resistance Index already [0,1] (tanh-based), no normalization needed
     const cd = tl.map(d => ({
       date: d.date,
-      dateShort: d.date.slice(5), // MM-DD
+      dateShort: d.date.slice(5),
       price: d.price,
       resistance: d.resistance,
-      resistanceNorm: d.resistance,  // already 0-1
+      resistanceNorm: d.resistance,
       stateId: d.state_id,
       stateName: d.state_name,
       shortName: d.short_name || d.state_name,
@@ -37,7 +56,6 @@ export default function Timeline() {
       volumeUsd: d.volume_usd,
     }));
 
-    // Build contiguous state zones for background coloring
     const zones = [];
     let current = null;
     for (let i = 0; i < cd.length; i++) {
@@ -55,7 +73,18 @@ export default function Timeline() {
     }
     if (current && cd.length) current.x2 = cd[cd.length - 1].date;
 
-    return { chartData: cd, stateZones: zones };
+    // Collect unique states for legend
+    const seen = new Set();
+    const unique = [];
+    for (const z of zones) {
+      const key = `${z.category}-${z.stateId}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push({ category: z.category, stateId: z.stateId, stateName: z.stateName, shortName: z.shortName });
+      }
+    }
+
+    return { chartData: cd, stateZones: zones, uniqueStates: unique };
   }, [data]);
 
   if (loading) return <div className="timeline-loading">Loading history…</div>;
@@ -69,30 +98,49 @@ export default function Timeline() {
         <span className="timeline-sub">{data.period_days} days · {data.data_source}</span>
       </div>
 
-      {/* State legend ribbon */}
+      {/* State ribbon */}
       <div className="state-ribbon-wrap">
-        <div className="state-ribbon-header">
-          <InfoDot text={INFO_TEXTS.stateRibbon} position="inline" size="small" />
-        </div>
         <div className="state-ribbon">
-        {stateZones.map((z, i) => {
-          const days = Math.max(1, (new Date(z.x2) - new Date(z.x1)) / 86400000 + 1);
-          return (
-            <div key={i} className={`ribbon-segment cat-${z.category}`}
-              style={{ flex: days }}
-              title={`${z.stateName} (${z.x1} → ${z.x2})`}>
-              {days > 5 && <span className="ribbon-label">{z.shortName}</span>}
-            </div>
-          );
-        })}
+          {stateZones.map((z, i) => {
+            const days = Math.max(1, (new Date(z.x2) - new Date(z.x1)) / 86400000 + 1);
+            const isHovered = hoveredZone === i;
+            const showLabel = days > 6;
+            const showIcon = days >= 3 && days <= 6;
+            return (
+              <div
+                key={i}
+                className={`ribbon-segment ${getCatClass(z.category, z.stateId)} ${isHovered ? 'ribbon-hovered' : ''}`}
+                style={{ flex: days }}
+                onMouseEnter={() => setHoveredZone(i)}
+                onMouseLeave={() => setHoveredZone(null)}
+              >
+                {showLabel && <span className="ribbon-label">{z.shortName}</span>}
+                {showIcon && <span className="ribbon-icon">{STATE_ICONS[getIconKey(z.category, z.stateId)] || '•'}</span>}
+                {isHovered && (
+                  <div className="ribbon-tooltip">
+                    <div className="ribbon-tooltip-name">{z.stateName}</div>
+                    <div className="ribbon-tooltip-dates">{z.x1} → {z.x2}</div>
+                    <div className="ribbon-tooltip-days">{days} day{days !== 1 ? 's' : ''}</div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {/* Color legend for ribbon */}
+        <div className="ribbon-legend">
+          {uniqueStates.map((s, i) => (
+            <span key={i} className="ribbon-legend-item">
+              <span className={`ribbon-legend-dot ${getCatClass(s.category, s.stateId)}`} />
+              {s.shortName}
+            </span>
+          ))}
         </div>
       </div>
 
       <div className="timeline-chart-wrap">
         <ResponsiveContainer width="100%" height={320}>
           <ComposedChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
 
             <XAxis
@@ -119,7 +167,6 @@ export default function Timeline() {
 
             <Tooltip content={<CustomTooltip />} />
 
-            {/* Price area */}
             <Area
               yAxisId="price" type="monotone" dataKey="price"
               stroke="#F0F2F8" strokeWidth={2}
@@ -127,7 +174,6 @@ export default function Timeline() {
               dot={false} activeDot={{ r: 4, fill: '#F0F2F8' }}
             />
 
-            {/* Resistance line */}
             <Line
               yAxisId="resistance" type="monotone" dataKey="resistanceNorm"
               stroke="#00DCFF" strokeWidth={2} strokeDasharray="6 3"

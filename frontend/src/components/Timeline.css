@@ -29,51 +29,161 @@
   color: var(--text-muted);
 }
 
-/* ── State Ribbon ── */
+/* ── State Ribbon (enhanced) ── */
 .state-ribbon-wrap {
   position: relative;
-  margin-bottom: 16px;
-}
-
-.state-ribbon-header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 4px;
-  padding-right: 80px;
+  margin-bottom: 12px;
 }
 
 .state-ribbon {
   display: flex;
   gap: 2px;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  height: 28px;
-  /* Align with chart: Left Margin 10 + Width 60 = 70px | Right Margin 20 + Width 60 = 80px */
+  height: 36px;
+  /* Align with chart axes: Left 70px, Right 80px */
   padding-left: 70px;
   padding-right: 80px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
 }
 
 .ribbon-segment {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  transition: opacity 0.2s;
+  min-width: 12px;
+  position: relative;
   cursor: default;
+  transition: filter 0.2s, transform 0.15s;
+  border-bottom: 2px solid transparent;
 }
-.ribbon-segment:hover { opacity: 0.8; }
-.ribbon-segment.cat-healthy { background: rgba(0,229,160,0.15); }
-.ribbon-segment.cat-caution { background: rgba(255,181,71,0.12); }
-.ribbon-segment.cat-warning { background: rgba(255,92,92,0.12); }
+
+/* More saturated colors + bottom glow */
+.ribbon-segment.cat-healthy {
+  background: linear-gradient(180deg, rgba(0,229,160,0.28) 0%, rgba(0,229,160,0.12) 100%);
+  border-bottom-color: rgba(0,229,160,0.5);
+}
+/* Stability variant — warmer / slightly yellow-green */
+.ribbon-segment.cat-healthy-warm {
+  background: linear-gradient(180deg, rgba(120,220,120,0.26) 0%, rgba(160,200,80,0.12) 100%);
+  border-bottom-color: rgba(140,210,90,0.5);
+}
+.ribbon-segment.cat-caution {
+  background: linear-gradient(180deg, rgba(255,181,71,0.25) 0%, rgba(255,181,71,0.10) 100%);
+  border-bottom-color: rgba(255,181,71,0.5);
+}
+.ribbon-segment.cat-warning {
+  background: linear-gradient(180deg, rgba(255,92,92,0.28) 0%, rgba(255,92,92,0.12) 100%);
+  border-bottom-color: rgba(255,92,92,0.5);
+}
+
+.ribbon-segment:hover,
+.ribbon-segment.ribbon-hovered {
+  filter: brightness(1.3);
+  z-index: 2;
+}
 
 .ribbon-label {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--text-secondary);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 6px;
+  padding: 0 8px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  letter-spacing: 0.02em;
+}
+
+.ribbon-icon {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* ── Ribbon Tooltip (custom hover popup) ── */
+.ribbon-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(10, 12, 24, 0.95);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  backdrop-filter: blur(16px);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.ribbon-tooltip-name {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.ribbon-tooltip-dates {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.ribbon-tooltip-days {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── Ribbon Color Legend ── */
+.ribbon-legend {
+  display: flex;
+  gap: 14px;
+  padding-left: 70px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.ribbon-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-secondary);
+}
+
+.ribbon-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.ribbon-legend-dot.cat-healthy {
+  background: rgba(0,229,160,0.35);
+  border: 1px solid #00E5A0;
+  box-shadow: 0 0 6px rgba(0,229,160,0.3);
+}
+.ribbon-legend-dot.cat-healthy-warm {
+  background: rgba(140,210,90,0.35);
+  border: 1px solid #8CD25A;
+  box-shadow: 0 0 6px rgba(140,210,90,0.3);
+}
+.ribbon-legend-dot.cat-caution {
+  background: rgba(255,181,71,0.3);
+  border: 1px solid #FFB547;
+  box-shadow: 0 0 6px rgba(255,181,71,0.25);
+}
+.ribbon-legend-dot.cat-warning {
+  background: rgba(255,92,92,0.3);
+  border: 1px solid #FF5C5C;
+  box-shadow: 0 0 6px rgba(255,92,92,0.25);
 }
 
 /* ── Chart ── */
@@ -109,16 +219,6 @@
   border-top: 2px dashed #00DCFF;
   height: 0;
 }
-
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-}
-.legend-dot.cat-healthy { background: rgba(0,229,160,0.3); border: 1px solid #00E5A0; }
-.legend-dot.cat-caution { background: rgba(255,181,71,0.2); border: 1px solid #FFB547; }
-.legend-dot.cat-warning { background: rgba(255,92,92,0.2); border: 1px solid #FF5C5C; }
 
 /* ── Tooltip ── */
 .tl-tooltip {
