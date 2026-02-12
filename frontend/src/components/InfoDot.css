@@ -65,6 +65,20 @@
   transform: translateX(-50%);
 }
 
+.info-dot-wrap.inline-up {
+  position: relative;
+  top: auto;
+  right: auto;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.info-dot-wrap.inline-up .info-dot-tooltip {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .info-dot-text {
   font-family: var(--font-body);
   font-size: 12px;

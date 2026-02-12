@@ -139,7 +139,7 @@ export default function Timeline() {
 
       <div className="timeline-legend">
         <span className="legend-item"><span className="legend-line price-line" /> Price (USD)</span>
-        <span className="legend-item"><span className="legend-line resistance-line" /> Resistance Index <InfoDot text={INFO_TEXTS.resistanceLegend} position="inline" size="small" /></span>
+        <span className="legend-item"><span className="legend-line resistance-line" /> Resistance Index <InfoDot text={INFO_TEXTS.resistanceLegend} position="inline-up" size="small" /></span>
       </div>
     </section>
   );
