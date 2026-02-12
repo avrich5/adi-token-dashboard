@@ -5,6 +5,8 @@ import {
   ReferenceLine
 } from 'recharts';
 import { useHistoryData } from '../hooks/useHistoryData';
+import InfoDot from './InfoDot';
+import { INFO_TEXTS } from '../utils/infoTexts';
 import './ForcesTimeline.css';
 
 const FORCES_META = [
@@ -50,7 +52,7 @@ export default function ForcesTimeline() {
   return (
     <section className="ft-section">
       <div className="ft-header">
-        <h2 className="ft-title">Force Decomposition</h2>
+        <h2 className="ft-title">Force Decomposition <InfoDot text={INFO_TEXTS.forcesTimeline} position="inline" /></h2>
         <div className="ft-badges">
           <span className="ft-badge mockup">3 of 5 forces estimated</span>
         </div>

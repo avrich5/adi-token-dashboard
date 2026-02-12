@@ -1,3 +1,5 @@
+import InfoDot from './InfoDot';
+import { INFO_TEXTS } from '../utils/infoTexts';
 import './ForcesPanel.css';
 
 function ForceBar({ name, value, isMockup }) {
@@ -27,6 +29,7 @@ export default function ForcesPanel({ forces }) {
   const mockupCount = forces.items.filter(f => f.is_mockup).length;
   return (
     <div className="forces-panel card">
+      <InfoDot text={INFO_TEXTS.forcesPanel} />
       <div className="fp-label">ACTIVE FORCES</div>
       <div className="fp-list">
         {forces.items.map(f => (

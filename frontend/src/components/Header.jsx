@@ -14,7 +14,7 @@ export default function Header({ timestamp }) {
             <defs><linearGradient id="adi_g" x1="71.6553" y1="89.259" x2="71.6553" y2="192.993" gradientUnits="userSpaceOnUse"><stop stopColor="#FE7109"/><stop offset="1" stopColor="#003BFF"/></linearGradient></defs>
           </svg>
         </div>
-        <div className="hdr-title">Token Health <span>/ Economic Observability</span></div>
+        <div className="hdr-title">Intelligence Semantic Layer<span></span></div>
       </div>
       <div className="hdr-right">
         <span className="hdr-live"><span className="hdr-dot" /> LIVE</span>

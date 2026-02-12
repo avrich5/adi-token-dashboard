@@ -30,10 +30,21 @@
 }
 
 /* ── State Ribbon ── */
+.state-ribbon-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.state-ribbon-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+  padding-right: 80px;
+}
+
 .state-ribbon {
   display: flex;
   gap: 2px;
-  margin-bottom: 16px;
   border-radius: 6px;
   overflow: hidden;
   height: 28px;

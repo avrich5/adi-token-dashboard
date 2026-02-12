@@ -1,10 +1,13 @@
 import { CATEGORY_COLORS } from '../utils/format';
+import InfoDot from './InfoDot';
+import { INFO_TEXTS } from '../utils/infoTexts';
 import './TransitionsPanel.css';
 
 export default function TransitionsPanel({ transitions }) {
   if (!transitions || transitions.length === 0) return null;
   return (
     <div className="trans-panel card">
+      <InfoDot text={INFO_TEXTS.transitionsPanel} />
       <div className="tp-label">PROBABLE TRANSITIONS</div>
       <div className="tp-list">
         {transitions.map((t, i) => {

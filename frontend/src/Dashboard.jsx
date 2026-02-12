@@ -1,5 +1,6 @@
 import { useDashboardData } from './hooks/useDashboardData';
 import { fmt } from './utils/format';
+import { INFO_TEXTS } from './utils/infoTexts';
 import Header from './components/Header';
 import StateCard from './components/StateCard';
 import MetricCard from './components/MetricCard';
@@ -38,19 +39,23 @@ export default function Dashboard() {
             label="PRICE" value={fmt.usd(price.current)} sub="ADI / USD"
             change={`▴ ${fmt.pct(price.change_7d_pct)} 7d`}
             changeColor={price.change_7d_pct >= 0 ? 'green' : 'red'}
+            info={INFO_TEXTS.price}
           />
           <MetricCard
             label="VOLUME 24H" value={fmt.usdCompact(price.volume_24h)} sub="Trading volume"
             change={`▴ ${volRatio.toFixed(2)}x vs 7d avg`}
             changeColor={volRatio >= 1 ? 'green' : 'amber'}
+            info={INFO_TEXTS.volume}
           />
           <MetricCard
             label="MARKET CAP" value={fmt.usdCompact(price.market_cap)} sub="Fully diluted"
+            info={INFO_TEXTS.marketCap}
           />
           <MetricCard
             label="RESISTANCE INDEX" value={fmt.num(resistance.value)} sub="Market resilience"
             change={resistance.value < 0.1 ? '▾ Fragile' : resistance.value < 0.3 ? '◈ Low' : resistance.value < 0.6 ? '◈ Moderate' : '▴ Resilient'}
             changeColor={resistance.value < 0.1 ? 'red' : resistance.value < 0.3 ? 'amber' : 'green'}
+            info={INFO_TEXTS.resistance}
           />
         </div>
 

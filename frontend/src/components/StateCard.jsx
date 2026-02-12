@@ -1,4 +1,6 @@
 import { CATEGORY_COLORS } from '../utils/format';
+import InfoDot from './InfoDot';
+import { INFO_TEXTS } from '../utils/infoTexts';
 import './StateCard.css';
 
 const R = 80, C = 2 * Math.PI * R;
@@ -13,6 +15,7 @@ export default function StateCard({ state, resistance }) {
 
   return (
     <div className="state-card card">
+      <InfoDot text={INFO_TEXTS.stateCard} />
       <div className="state-label">ECONOMIC STATE</div>
       <div className="state-ring-wrap">
         <svg viewBox="0 0 200 200" className="state-ring">

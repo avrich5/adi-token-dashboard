@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useScenariosData } from '../hooks/useScenariosData';
+import InfoDot from './InfoDot';
+import { INFO_TEXTS } from '../utils/infoTexts';
 import './ScenariosValidation.css';
 
 const CAT_COLORS = {
@@ -24,10 +26,11 @@ export default function ScenariosValidation() {
       {/* Header */}
       <div className="sv-header">
         <div className="sv-header-left">
-          <h2 className="sv-title">Scenario Validation</h2>
+          <h2 className="sv-title">Scenario Validation <InfoDot text={INFO_TEXTS.scenariosValidation} position="inline" /></h2>
           <span className="sv-sub">From probable to proven · Daily bruteforce analysis</span>
         </div>
         <div className="sv-summary-badges">
+          <InfoDot text={INFO_TEXTS.summaryBadges} />
           <div className="sv-badge knowledge">
             <span className="sv-badge-num">{summary?.knowledge_units ?? 0}</span>
             <span className="sv-badge-label">validated units</span>
@@ -139,6 +142,7 @@ export default function ScenariosValidation() {
 
       {/* Bottom: growing knowledge counter */}
       <div className="sv-knowledge-bar">
+        <InfoDot text={INFO_TEXTS.knowledgeBar} />
         <div className="sv-kb-track">
           <div
             className="sv-kb-fill"

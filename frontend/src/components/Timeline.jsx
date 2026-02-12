@@ -4,6 +4,8 @@ import {
   CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea
 } from 'recharts';
 import { useHistoryData } from '../hooks/useHistoryData';
+import InfoDot from './InfoDot';
+import { INFO_TEXTS } from '../utils/infoTexts';
 import './Timeline.css';
 
 const STATE_COLORS = {
@@ -63,12 +65,16 @@ export default function Timeline() {
   return (
     <section className="timeline-section">
       <div className="timeline-header">
-        <h2 className="timeline-title">Economic State Timeline</h2>
+        <h2 className="timeline-title">Economic State Timeline <InfoDot text={INFO_TEXTS.timeline} position="inline" /></h2>
         <span className="timeline-sub">{data.period_days} days · {data.data_source}</span>
       </div>
 
       {/* State legend ribbon */}
-      <div className="state-ribbon">
+      <div className="state-ribbon-wrap">
+        <div className="state-ribbon-header">
+          <InfoDot text={INFO_TEXTS.stateRibbon} position="inline" size="small" />
+        </div>
+        <div className="state-ribbon">
         {stateZones.map((z, i) => {
           const days = Math.max(1, (new Date(z.x2) - new Date(z.x1)) / 86400000 + 1);
           return (
@@ -79,6 +85,7 @@ export default function Timeline() {
             </div>
           );
         })}
+        </div>
       </div>
 
       <div className="timeline-chart-wrap">
@@ -132,7 +139,7 @@ export default function Timeline() {
 
       <div className="timeline-legend">
         <span className="legend-item"><span className="legend-line price-line" /> Price (USD)</span>
-        <span className="legend-item"><span className="legend-line resistance-line" /> Resistance Index</span>
+        <span className="legend-item"><span className="legend-line resistance-line" /> Resistance Index <InfoDot text={INFO_TEXTS.resistanceLegend} position="inline" size="small" /></span>
       </div>
     </section>
   );

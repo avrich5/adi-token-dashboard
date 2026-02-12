@@ -1,8 +1,10 @@
+import InfoDot from './InfoDot';
 import './MetricCard.css';
 
-export default function MetricCard({ label, value, sub, change, changeColor }) {
+export default function MetricCard({ label, value, sub, change, changeColor, info }) {
   return (
     <div className="metric-card card">
+      {info && <InfoDot text={info} />}
       <div className="mc-label">{label}</div>
       <div className="mc-value" style={changeColor === 'red' ? {color:'var(--red)'} : {}}>{value}</div>
       {sub && <div className="mc-sub">{sub}</div>}

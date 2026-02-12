@@ -27,6 +27,7 @@
 }
 
 .sv-summary-badges {
+  position: relative;
   display: flex;
   gap: 0.75rem;
 }
@@ -257,6 +258,7 @@
 
 /* Knowledge bar */
 .sv-knowledge-bar {
+  position: relative;
   margin-top: 1rem;
   padding: 0.75rem 0;
 }
